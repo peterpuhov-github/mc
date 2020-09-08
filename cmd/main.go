@@ -331,6 +331,7 @@ var appCmds = []cli.Command{
 	shareCmd,
 	findCmd,
 	sqlCmd,
+	customCmd,
 	statCmd,
 	mvCmd,
 	treeCmd,
