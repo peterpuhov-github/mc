@@ -38,7 +38,9 @@ import (
 
 	"github.com/minio/mc/pkg/httptracer"
 	"github.com/minio/mc/pkg/probe"
+
 	minio "github.com/minio/minio-go/v7"
+
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/minio/minio-go/v7/pkg/encrypt"
 	"github.com/minio/minio-go/v7/pkg/lifecycle"
@@ -621,7 +623,29 @@ func (c *S3Client) Select(ctx context.Context, expression string, sse encrypt.Se
 
 	opts.InputSerialization = selectObjectInputOpts(selOpts, object)
 	opts.OutputSerialization = selectObjectOutputOpts(selOpts, opts.InputSerialization)
+
 	reader, e := c.api.SelectObjectContent(ctx, bucket, object, opts)
+	if e != nil {
+		return nil, probe.NewError(e)
+	}
+	return reader, nil
+}
+
+// GetCustom - GetCustom object content wrapper.
+func (c *S3Client) GetCustom(ctx context.Context, expression string, sse encrypt.ServerSide, selOpts SelectObjectOpts) (io.ReadCloser, *probe.Error) {
+	opts := minio.SelectObjectOptions{
+		Expression:     expression,
+		ExpressionType: minio.QueryExpressionTypeSQL,
+		// Set any encryption headers
+		ServerSideEncryption: sse,
+	}
+
+	bucket, object := c.url2BucketAndObject()
+
+	opts.InputSerialization = selectObjectInputOpts(selOpts, object)
+	opts.OutputSerialization = selectObjectOutputOpts(selOpts, opts.InputSerialization)
+
+	reader, e := c.api.GetCustomObjectContent(ctx, bucket, object, opts)
 	if e != nil {
 		return nil, probe.NewError(e)
 	}

@@ -104,6 +104,9 @@ type Client interface {
 	// Runs select expression on object storage on specific files.
 	Select(ctx context.Context, expression string, sse encrypt.ServerSide, opts SelectObjectOpts) (io.ReadCloser, *probe.Error)
 
+	// Runs custom get expression on object storage on specific files.
+	GetCustom(ctx context.Context, expression string, sse encrypt.ServerSide, opts SelectObjectOpts) (io.ReadCloser, *probe.Error)
+
 	// I/O operations with metadata.
 	Get(ctx context.Context, opts GetOptions) (reader io.ReadCloser, err *probe.Error)
 
