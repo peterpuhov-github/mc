@@ -370,7 +370,7 @@ func customSelect(targetURL, expression string, encKeyDB map[string][]prefixSSEP
 	}
 
 	sseKey := getSSE(targetURL, encKeyDB[alias])
-	outputer, err := targetClnt.Select(ctx, expression, sseKey, selOpts)
+	outputer, err := targetClnt.GetCustom(ctx, expression, sseKey, selOpts)
 	if err != nil {
 		return err.Trace(targetURL, expression)
 	}
@@ -439,6 +439,7 @@ func mainCustom(cliCtx *cli.Context) error {
 			continue
 		}
 		targetAlias, targetURL, _ := mustExpandAlias(url)
+
 		clnt, err := newClientFromAlias(targetAlias, targetURL)
 		if err != nil {
 			errorIf(err.Trace(url), "Unable to initialize target `"+url+"`.")
