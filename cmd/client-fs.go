@@ -126,6 +126,14 @@ func (f *fsClient) Select(ctx context.Context, expression string, sse encrypt.Se
 	})
 }
 
+// GetCustom replies a stream of query results.
+func (f *fsClient) GetCustom(ctx context.Context, expression string, sse encrypt.ServerSide, opts SelectObjectOpts) (io.ReadCloser, *probe.Error) {
+	return nil, probe.NewError(APINotImplemented{
+		API:     "GetCustom",
+		APIType: "filesystem",
+	})
+}
+
 // Watches for all fs events on an input path.
 func (f *fsClient) Watch(ctx context.Context, options WatchOptions) (*WatchObject, *probe.Error) {
 	eventChan := make(chan []EventInfo)
