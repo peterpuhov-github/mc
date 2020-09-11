@@ -635,10 +635,12 @@ func (c *S3Client) Select(ctx context.Context, expression string, sse encrypt.Se
 func (c *S3Client) GetCustom(ctx context.Context, expression string, sse encrypt.ServerSide, selOpts SelectObjectOpts) (io.ReadCloser, *probe.Error) {
 	opts := minio.SelectObjectOptions{
 		Expression:     expression,
-		ExpressionType: minio.QueryExpressionTypeSQL,
+		ExpressionType: minio.QueryExpressionTypeCustom,
 		// Set any encryption headers
 		ServerSideEncryption: sse,
 	}
+
+	//runtime.Breakpoint()
 
 	bucket, object := c.url2BucketAndObject()
 
