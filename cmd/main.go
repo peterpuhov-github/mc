@@ -369,7 +369,7 @@ func registerApp(name string) *cli.App {
 	app.Action = func(ctx *cli.Context) error {
 		if strings.HasPrefix(ReleaseTag, "RELEASE.") {
 			// Check for new updates from dl.min.io.
-			checkUpdate(ctx)
+			//checkUpdate(ctx)
 		}
 
 		if ctx.Bool("autocompletion") || ctx.GlobalBool("autocompletion") {
